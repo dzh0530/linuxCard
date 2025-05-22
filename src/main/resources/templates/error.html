@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: html(
+        ~{::title},
+        ~{::section},
+        '',
+        ~{},
+        ~{}
+      )}">
+<head>
+    <title>错误 - Linux.do CDK分发平台</title>
+</head>
+<body>
+    <section th:fragment="content">
+        <div class="error-container">
+            <h2>出错了</h2>
+            <p th:if="${errorMessage}" th:text="${errorMessage}">发生了一个错误</p>
+            <p th:unless="${errorMessage}">发生了一个错误，请稍后再试</p>
+            <a th:href="@{/}" class="btn primary">返回首页</a>
+        </div>
+    </section>
+</body>
+</html>

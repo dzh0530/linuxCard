@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: html(
+        ~{::title},
+        ~{::section},
+        'home',
+        ~{},
+        ~{}
+      )}">
+<head>
+    <title>Linux.do CDK分发平台 - 首页</title>
+</head>
+<body>
+    <section th:fragment="content">
+        <section class="banner">
+            <h2>Linux.do社区CDK分发平台</h2>
+            <p>公平、透明的CDK分发系统，基于用户信任等级控制领取权限</p>
+        </section>
+
+        <section class="cdk-list">
+            <h3>可领取的CDK</h3>
+            <div class="filter">
+                <select id="activityFilter">
+                    <option value="all">全部</option>
+                    <option value="available">可领取</option>
+                    <option value="claimed">已领取</option>
+                </select>
+            </div>
+
+            <div class="cdk-cards">
+                <!-- CDK卡片示例 -->
+                <div th:each="activity : ${activities}" class="cdk-card">
+                    <div class="card-header">
+                        <h4 th:text="${activity.title}">JetBrains全家桶激活码</h4>
+                        <span class="trust-badge" th:text="'信任等级: ' + ${activity.minTrustLevel} + '+'">信任等级: 2+</span>
+                    </div>
+                    <div class="card-body">
+                        <p th:text="${activity.description}">JetBrains全系列IDE一年激活码，包括IntelliJ IDEA、PyCharm、WebStorm等</p>
+                        <div class="card-meta">
+                            <span th:text="'剩余: ' + ${activity.remainingCount} + '/' + ${activity.totalCount}">剩余: 42/100</span>
+                            <span th:text="'有效期至: ' + ${#temporals.format(activity.endTime, 'yyyy-MM-dd')}">有效期至: 2023-12-31</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a th:href="@{'/activity/' + ${activity.id}}" class="btn">查看详情</a>
+                    </div>
+                </div>
+                <!-- 更多CDK卡片 -->
+            </div>
+
+            <div class="pagination" th:if="${activities.totalPages > 0}">
+                <a th:href="@{/(page=${activities.number - 1})}" class="prev" th:if="${activities.hasPrevious()}">上一页</a>
+                <span class="page-num" th:text="${activities.number + 1} + '/' + ${activities.totalPages}">1/5</span>
+                <a th:href="@{/(page=${activities.number + 1})}" class="next" th:if="${activities.hasNext()}">下一页</a>
+            </div>
+        </section>
+    </section>
+</body>
+</html>
