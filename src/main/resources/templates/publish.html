@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: html(
+        ~{::title},
+        ~{::section},
+        'publish',
+        ~{},
+        ~{}
+      )}">
+<head>
+    <title>发布CDK - Linux.do CDK分发平台</title>
+</head>
+<body>
+    <section th:fragment="content">
+        <div class="breadcrumb">
+            <a th:href="@{/}">首页</a> &gt; <span>发布CDK</span>
+        </div>
+
+        <section class="publish-form">
+            <h2>发布新的CDK活动</h2>
+
+            <form id="cdkPublishForm">
+                <div class="form-group">
+                    <label for="title">活动标题</label>
+                    <input type="text" id="title" name="title" required placeholder="例如：JetBrains全家桶激活码">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">活动描述</label>
+                    <textarea id="description" name="description" rows="4" required placeholder="详细描述此CDK的用途和来源"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="usageGuide">使用说明</label>
+                    <textarea id="usageGuide" name="usageGuide" rows="4" required placeholder="详细说明如何使用此CDK"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="startTime">开始时间</label>
+                        <input type="datetime-local" id="startTime" name="startTime" required>
+                    </div>
+
+                    <div class="form-group half">
+                        <label for="endTime">结束时间</label>
+                        <input type="datetime-local" id="endTime" name="endTime" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="minTrustLevel">最低信任等级要求</label>
+                    <select id="minTrustLevel" name="minTrustLevel" required>
+                        <option value="1">1级 (所有用户)</option>
+                        <option value="2">2级 (仅2级及以上用户)</option>
+                        <option value="3">3级 (仅3级用户)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="isPublic">是否公开</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="isPublic" value="true" checked> 是
+                        </label>
+                        <label>
+                            <input type="radio" name="isPublic" value="false"> 否
+                        </label>
+                    </div>
+                    <p class="form-hint">公开的活动会显示在首页，非公开活动需要通过链接访问</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="cdkList">CDK列表</label>
+                    <textarea id="cdkList" name="cdkList" rows="10" required placeholder="每行输入一个CDK，系统会自动识别和分割"></textarea>
+                    <p class="form-hint">也可以粘贴包含多个CDK的文本，系统会自动识别和分割</p>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn primary">发布CDK</button>
+                    <button type="button" class="btn secondary">保存为草稿</button>
+                </div>
+            </form>
+        </section>
+    </section>
+</body>
+</html>

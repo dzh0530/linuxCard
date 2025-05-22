@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: html(
+        ~{::title},
+        ~{::section},
+        'home',
+        ~{},
+        ~{}
+      )}">
+<head>
+    <title th:text="${activity.title} + ' - Linux.do CDK分发平台'">JetBrains全家桶激活码 - Linux.do CDK分发平台</title>
+</head>
+<body>
+    <section th:fragment="content">
+        <div class="breadcrumb">
+            <a th:href="@{/}">首页</a> &gt; <span th:text="${activity.title}">JetBrains全家桶激活码</span>
+        </div>
+
+        <section class="activity-detail">
+            <div class="activity-header">
+                <h2 th:text="${activity.title}">JetBrains全家桶激活码</h2>
+                <span class="trust-badge" th:text="'信任等级: ' + ${activity.minTrustLevel} + '+'">信任等级: 2+</span>
+            </div>
+
+            <div class="activity-info">
+                <div class="info-item">
+                    <span class="label">发布者:</span>
+                    <span class="value" th:text="${activity.creator.username}">Linux爱好者</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">发布时间:</span>
+                    <span class="value" th:text="${#temporals.format(activity.createdAt, 'yyyy-MM-dd HH:mm')}">2023-06-01 10:00</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">有效期至:</span>
+                    <span class="value" th:text="${#temporals.format(activity.endTime, 'yyyy-MM-dd HH:mm')}">2023-12-31</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">剩余数量:</span>
+                    <span class="value" th:text="${activity.remainingCount} + '/' + ${activity.totalCount}">42/100</span>
+                </div>
+            </div>
+
+            <div class="activity-description">
+                <h3>活动描述</h3>
+                <div class="content" th:utext="${#strings.replace(#strings.escapeXml(activity.description), '&#10;', '<br>')}">
+                    <p>JetBrains全系列IDE一年激活码，包括IntelliJ IDEA、PyCharm、WebStorm等。</p>
+                    <p>这些激活码由JetBrains官方提供，可用于激活所有JetBrains产品一年时间。</p>
+                </div>
+            </div>
+
+            <div class="usage-guide">
+                <h3>使用说明</h3>
+                <div class="content" th:utext="${#strings.replace(#strings.escapeXml(activity.usageGuide), '&#10;', '<br>')}">
+                    <ol>
+                        <li>打开任意JetBrains IDE</li>
+                        <li>点击菜单 Help -> Register</li>
+                        <li>选择 "Activation code"</li>
+                        <li>粘贴激活码并点击激活</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="claim-area" 
+                 th:data-activity-id="${activity.id}" 
+                 th:data-min-trust-level="${activity.minTrustLevel}"
+                 th:data-has-claimed="${activity.hasClaimed}">
+                <!-- 未登录状态 -->
+                <div class="not-logged-in">
+                    <p>请先使用Linux.do账号登录后领取</p>
+                    <button class="login-btn">使用Linux.do登录</button>
+                </div>
+
+                <!-- 已登录但信任等级不足 -->
+                <!-- <div class="insufficient-trust">
+                    <p>您当前的信任等级为 1，需要信任等级 2+ 才能领取</p>
+                    <a href="https://linux.do/t/topic/12345" target="_blank" class="btn secondary">如何提升信任等级?</a>
+                </div> -->
+
+                <!-- 已登录且可领取 -->
+                <!-- <div class="can-claim">
+                    <p>您当前的信任等级为 2，符合领取条件</p>
+                    <button class="claim-btn">领取CDK</button>
+                </div> -->
+
+                <!-- 已领取 -->
+                <!-- <div class="claimed">
+                    <p>您已成功领取此CDK</p>
+                    <div class="cdk-display">
+                        <input type="text" value="ABCD-EFGH-IJKL-MNOP" readonly>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                </div> -->
+            </div>
+        </section>
+    </section>
+</body>
+</html>

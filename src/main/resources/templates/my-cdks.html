@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: html(
+        ~{::title},
+        ~{::section},
+        'my-cdks',
+        ~{},
+        ~{}
+      )}">
+<head>
+    <title>我的CDK - Linux.do CDK分发平台</title>
+</head>
+<body>
+    <section th:fragment="content">
+        <div class="breadcrumb">
+            <a th:href="@{/}">首页</a> &gt; <span>我的CDK</span>
+        </div>
+
+        <section class="my-cdks">
+            <h2>我的CDK</h2>
+
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="claimed">已领取的CDK</button>
+                <button class="tab-btn" data-tab="published">我发布的CDK</button>
+            </div>
+
+            <div class="tab-content active" id="claimed-tab">
+                <div class="cdk-cards" th:if="${not #lists.isEmpty(claimedCdks)}">
+                    <div th:each="cdk : ${claimedCdks}" class="cdk-card">
+                        <div class="card-header">
+                            <h4 th:text="${cdk.activity.title}">JetBrains全家桶激活码</h4>
+                            <span class="claimed-badge">已领取</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="cdk-code">
+                                <label>CDK码:</label>
+                                <div class="code-display">
+                                    <input type="text" th:value="${cdk.code}" readonly>
+                                    <button class="copy-btn" th:data-clipboard-text="${cdk.code}">复制</button>
+                                </div>
+                            </div>
+                            <div class="card-meta">
+                                <span th:text="'领取时间: ' + ${#temporals.format(cdk.claimedAt, 'yyyy-MM-dd HH:mm')}">领取时间: 2023-06-01 10:30</span>
+                                <span th:text="'有效期至: ' + ${#temporals.format(cdk.activity.endTime, 'yyyy-MM-dd')}">有效期至: 2023-12-31</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a th:href="@{'/activity/' + ${cdk.activity.id}}" class="btn">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="empty-state" th:if="${#lists.isEmpty(claimedCdks)}">
+                    <p>您还没有领取过CDK</p>
+                    <a th:href="@{/}" class="btn primary">浏览可领取的CDK</a>
+                </div>
+            </div>
+
+            <div class="tab-content" id="published-tab">
+                <div class="cdk-cards" th:if="${not #lists.isEmpty(publishedActivities)}">
+                    <div th:each="activity : ${publishedActivities}" class="cdk-card">
+                        <div class="card-header">
+                            <h4 th:text="${activity.title}">JetBrains全家桶激活码</h4>
+                            <span class="trust-badge" th:text="'信任等级: ' + ${activity.minTrustLevel} + '+'">信任等级: 2+</span>
+                        </div>
+                        <div class="card-body">
+                            <p th:text="${activity.description}">JetBrains全系列IDE一年激活码，包括IntelliJ IDEA、PyCharm、WebStorm等</p>
+                            <div class="card-meta">
+                                <span th:text="'剩余: ' + ${activity.remainingCount} + '/' + ${activity.totalCount}">剩余: 42/100</span>
+                                <span th:text="'有效期至: ' + ${#temporals.format(activity.endTime, 'yyyy-MM-dd')}">有效期至: 2023-12-31</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a th:href="@{'/activity/' + ${activity.id}}" class="btn">查看详情</a>
+                            <a th:href="@{'/activity/' + ${activity.id} + '/edit'}" class="btn secondary">编辑</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="empty-state" th:if="${#lists.isEmpty(publishedActivities)}">
+                    <p>您还没有发布过CDK</p>
+                    <a th:href="@{/publish}" class="btn primary">发布CDK</a>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <script th:fragment="extraScripts">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and contents
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to current button and content
+                    this.classList.add('active');
+                    document.getElementById(tabId + '-tab').classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
